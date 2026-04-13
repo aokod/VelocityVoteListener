@@ -1,0 +1,50 @@
+# VelocityVoteListener by Aedificium, et al. (https://github.com/aedifi)
+version: 1
+
+# The names under `routes` are labels; they are not serviceName keys.
+# Each route may contain:
+# - (optional) listenerLabel: the label from NuVotifier's VotifierEvent.getListenerLabel()
+# - (optional) services: list of vote source identifiers from the vote payload
+# - servers: list of backend server names to send messages to
+# - private-messages / public-messages: should be self-explanatory
+routes:
+  # The `default` route will be used if none of the others explicitly match.
+  # This behavior can be disabled by removing the block entirely.
+  default:
+    # Without `services`, this route will capture any vote source identifier.
+    servers:
+      - "lobby"
+    private-messages:
+      - "&aThanks &f%player%&a for voting for &f%service%&a!"
+    public-messages:
+      - "&6%player% &evoted on &6%service%&e!"
+
+  example-server:
+    listenerLabel: "example1"
+    services:
+      - "planetminecraft.com"
+    servers:
+      - "serv1"
+    private-messages:
+      - "&aThanks for voting on &f%service%&a!"
+    public-messages:
+      - "&6%player% &avoted for the server (&6%service%&a)."
+
+  another-server:
+    # Without `listenerLabel`, this route will capture any pre-configured inbound port (e.g. 8192).
+    services:
+      - "example-server-list"
+      - "example-server-list.net"
+    servers:
+      - "survival"
+    private-messages:
+      - "&aThanks &f%player%&a for voting for &f%service%&a!"
+    public-messages:
+      - "&6%player% &evoted for &6%service%&e!"
+
+delivery:
+  # If true, private messages are queued until the player joins the target backend server.
+  queue-private-until-target-join: true
+
+logging:
+  warn-on-no-matching-route: true
